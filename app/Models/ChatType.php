@@ -8,6 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class ChatType extends Model
 {
     use HasFactory;
-    protected $table ='Chat_Type';
+    protected $table ='ChatType';
 
 }
