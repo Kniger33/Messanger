@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/', function (){
+    return App\Models\Role::all();
+});
+
 Route::get('/api/v1/{userId}/chats', [\App\Http\Controllers\ChatController::class, 'index']);
 Route::post('/api/v1/{userId}/chats', [\App\Http\Controllers\ChatController::class, 'store']);
 
