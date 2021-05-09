@@ -2,9 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Document;
+use App\Models\Message;
+use App\Models\Role;
+use App\Models\User;
+use App\Models\UserChat;
+use Illuminate\Http\Request;
+
 use App\Models\Chat;
 use App\Models\ChatType;
-use Illuminate\Http\Request;
+
+use App\Http\Resources\ChatResource;
 
 class ChatController extends Controller
 {
@@ -13,11 +21,10 @@ class ChatController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($id)
+    public function index()
     {
-        foreach (Chat::all() as $chat) {
-            json_encode($chat);
-        }
+        $data = Document::find(2)->message;
+        return $this->jsonResponse($data);
     }
 
     /**
@@ -28,9 +35,6 @@ class ChatController extends Controller
      */
     public function store(Request $request)
     {
-        $name = $request->name;
-        $participantsNumber = $request->participantsNumber;
-        $idChatType = ChatType::where('name', $request->chatType)->get();
 
     }
 

@@ -4,12 +4,34 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\ChatType;
 
 class Chat extends Model
 {
     use HasFactory;
-    protected $table ='Chat';
-    protected $connection = 'sqlserv';
-    protected $dateFormat = 'U';
+
+    /*
+     * Название таблицы в БД
+     * @var string
+     * */
+    protected $table = 'chat';
+
+    /*
+     * Получить тип чата
+     * */
+    public function chatType()
+    {
+        return $this->belongsTo(ChatType::class, 'id_chat_type');
+    }
+
+    /*
+     *Получить всех пользователей чата
+     * */
+    public function users()
+    {
+        return $this->belongsToMany(User::class, "user_chat",
+            "id_chat", "id_user")
+            ->using(UserChat::class);
+    }
 
 }
