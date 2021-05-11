@@ -2,29 +2,35 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ChatCollection;
+use App\Http\Resources\ChatTypeResource;
 use App\Models\Document;
 use App\Models\Message;
 use App\Models\Role;
 use App\Models\User;
-use App\Models\UserChat;
+use App\Models\UserChatPivot;
 use Illuminate\Http\Request;
 
 use App\Models\Chat;
 use App\Models\ChatType;
 
 use App\Http\Resources\ChatResource;
+use Illuminate\Http\Resources\MergeValue;
 
 class ChatController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
+     * @param string $userId
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($userId)
     {
-        $data = Document::find(2)->message;
-        return $this->jsonResponse($data);
+        $chats = User::find($userId)->chats;
+        $data = new ChatCollection($chats);
+        $data = $data->additional(['asd' => "asd"]);
+        return response($data, '200');
     }
 
     /**
@@ -33,9 +39,30 @@ class ChatController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $userId)
     {
+        $userRole = Role::find(User::find($userId)->id_role)->name;
 
+        if ($userRole != 'admin')
+        {
+            return response([
+                'success' => 'failed',
+                'description' => 'Allowed only for admin'
+            ],
+            '403');
+        }
+        $chat_type = ChatType::where('name', '=', $request->chat_type)->get();
+
+        $chat = new Chat();
+        $chat->name = $request->name;
+        $chat->participants_number = $request->participants_number;
+        $chat->id_chat_type = $chat_type[0]['id'];
+        $chat->is_deleted = false;
+        $chat->save();
+
+        $data = Chat::find(Chat::max('id'));
+
+        return response($data, '201');
     }
 
     /**

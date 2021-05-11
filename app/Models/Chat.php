@@ -31,7 +31,8 @@ class Chat extends Model
     {
         return $this->belongsToMany(User::class, "user_chat",
             "id_chat", "id_user")
-            ->using(UserChat::class);
+            ->using(UserChatPivot::class)
+            ->withPivot('is_new_message');
     }
 
 }

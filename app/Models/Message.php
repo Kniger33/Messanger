@@ -16,11 +16,14 @@ class Message extends Model
     /*
      *
      * */
-    public function userChat()
+    public function user()
     {
-        return $this->belongsTo(UserChat::class, );
+        return $this->belongsToMany(UserChatPivot::class, 'user_chat', 'id_user', 'id_user');
     }
 
+    /*
+     * Получить документы, прикрепленные к сообщению
+     * */
     public function documents()
     {
         return $this->hasMany(Document::class, "id_message");

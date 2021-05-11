@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Relations\Pivot;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
-class UserChat extends Pivot
+class UserChat extends Model
 {
+    use HasFactory;
     /*
      * Название таблицы в БД
      * @var string
@@ -13,11 +15,26 @@ class UserChat extends Pivot
     protected $table = 'user_chat';
 
     /*
-     * Получить все сообщения пользователя в чате
+     * Получить пользователя
+     * */
+    public function user()
+    {
+        $this->belongsTo(User::class, 'id_user');
+    }
+
+    /*
+     * Получить чат
+     * */
+    public function chat()
+    {
+        $this->belongsTo(Chat::class, 'id_chat');
+    }
+
+    /*
+     *
      * */
     public function messages()
     {
-        return $this->hasMany(Message::class,  ["id_user", "id_chat"]);
+        $this->hasMany(Message::class);
     }
-
 }

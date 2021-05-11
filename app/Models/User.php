@@ -36,7 +36,8 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Chat::class, "user_chat",
                                 "id_user", "id_chat")
-            ->using(UserChat::class);
+            ->using(UserChatPivot::class)
+            ->withPivot('is_new_message');
     }
 //    /**
 //     * The attributes that are mass assignable.

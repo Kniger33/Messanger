@@ -17,3 +17,11 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+// Чат
+Route::get('/v1/{userId}/chats', [\App\Http\Controllers\ChatController::class, 'index']);
+Route::post('/v1/{userId}/chats', [\App\Http\Controllers\ChatController::class, 'store']);
+Route::get('/v1/{userId}/chats/{chatId}', [\App\Http\Controllers\ChatController::class, 'show']);
+Route::put('/v1/{userId}/chats/{chatId}', [\App\Http\Controllers\ChatController::class, 'update']);
+Route::delete('/v1/{userId}/chats/{chatId}', [\App\Http\Controllers\ChatController::class, 'destroy']);
+

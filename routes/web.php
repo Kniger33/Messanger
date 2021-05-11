@@ -18,8 +18,4 @@ use \App\Http\Resources\ChatResource;
 
 Route::get('/', [\App\Http\Controllers\ChatController::class, 'index']);
 
-Route::get('/api/v1/{userId}/chats', [\App\Http\Controllers\ChatController::class, 'index']);
-Route::post('/api/v1/{userId}/chats', [\App\Http\Controllers\ChatController::class, 'store']);
-
-
 
