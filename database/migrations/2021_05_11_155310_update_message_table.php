@@ -15,6 +15,7 @@ class UpdateMessageTable extends Migration
     {
         Schema::table('message', function (Blueprint $table) {
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

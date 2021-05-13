@@ -20,8 +20,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 // Чат
 Route::get('/v1/{userId}/chats', [\App\Http\Controllers\ChatController::class, 'index']);
-Route::post('/v1/{userId}/chats', [\App\Http\Controllers\ChatController::class, 'store']);
+Route::post('/v1/{userId}/chats', [\App\Http\Controllers\ChatController::class, 'store'])
+    ->middleware('isAdmin');
 Route::get('/v1/{userId}/chats/{chatId}', [\App\Http\Controllers\ChatController::class, 'show']);
-Route::put('/v1/{userId}/chats/{chatId}', [\App\Http\Controllers\ChatController::class, 'update']);
-Route::delete('/v1/{userId}/chats/{chatId}', [\App\Http\Controllers\ChatController::class, 'destroy']);
+Route::put('/v1/{userId}/chats/{chatId}', [\App\Http\Controllers\ChatController::class, 'update'])
+    ->middleware('isAdmin');
+Route::delete('/v1/{userId}/chats/{chatId}', [\App\Http\Controllers\ChatController::class, 'destroy'])
+    ->middleware('isAdmin');
 

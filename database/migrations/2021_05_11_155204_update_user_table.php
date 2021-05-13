@@ -15,6 +15,8 @@ class UpdateUserTable extends Migration
     {
         Schema::table('user', function (Blueprint $table) {
             $table->timestamps();
+            $table->softDeletes();
+
         });
     }
 

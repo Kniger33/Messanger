@@ -15,6 +15,7 @@ class UpdateChatTable extends Migration
     {
         Schema::table('chat', function (Blueprint $table) {
            $table->timestamps();
+           $table->softDeletes();
         });
     }
 

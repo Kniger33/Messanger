@@ -5,16 +5,25 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\ChatType;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Chat extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     /*
      * Название таблицы в БД
      * @var string
      * */
     protected $table = 'chat';
+
+    /**
+     * Формат хранения столбцов даты модели.
+     *
+     * @var string
+     */
+    protected $dateFormat = 'Y-d-m H:m:s';
 
     /*
      * Получить тип чата

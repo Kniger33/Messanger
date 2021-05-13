@@ -29,7 +29,7 @@ class ChatResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'messages_count' => $messages_count,
-            'deleted' => $this->isDeleted,
+            'deleted' => $this->is_deleted,
             'chat_type' => $chat_type,
             'participants_number' => $this->participants_number,
         ];
