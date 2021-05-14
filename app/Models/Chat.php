@@ -12,7 +12,7 @@ class Chat extends Model
     use HasFactory;
     use SoftDeletes;
 
-    /*
+    /**
      * Название таблицы в БД
      * @var string
      * */
@@ -25,7 +25,7 @@ class Chat extends Model
      */
     protected $dateFormat = 'Y-d-m H:m:s';
 
-    /*
+    /**
      * Получить тип чата
      * */
     public function chatType()
@@ -33,7 +33,7 @@ class Chat extends Model
         return $this->belongsTo(ChatType::class, 'id_chat_type');
     }
 
-    /*
+    /**
      *Получить всех пользователей чата
      * */
     public function users()

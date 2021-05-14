@@ -13,6 +13,13 @@ class Document extends Model
      * */
     protected $table = 'document';
 
+    /**
+     * Формат хранения столбцов даты модели.
+     *
+     * @var string
+     */
+    protected $dateFormat = 'Y-d-m H:m:s';
+
     /*
      * Получить сообщение, к которому привязан документ
      * */

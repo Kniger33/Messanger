@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Resources\ChatCollection;
 use App\Models\Document;
 use App\Models\Message;
-use App\Models\Role;
 use App\Models\User;
 use App\Models\UserChat;
 use Illuminate\Http\Request;
@@ -26,14 +25,6 @@ class ChatController extends Controller
     public function index($userId)
     {
         $user = User::find($userId);
-        if (empty($user))
-        {
-            $data = [
-                'success' => 'false',
-                'description' => 'There is no such user'
-            ];
-            return response($data, '404');
-        }
         $chats = $user->chats;
         $data = (new ChatCollection($chats))
         ->additional(['meta' => [
@@ -51,14 +42,6 @@ class ChatController extends Controller
      */
     public function store(Request $request, $userId)
     {
-        if (!$this->isAdmin($userId))
-        {
-            return response([
-                'success' => 'failed',
-                'description' => 'Allowed only for admin'
-            ],
-            '403');
-        }
         $chat_type = ChatType::where('name', '=', $request->chat_type)->get();
 
         $chat = new Chat();
@@ -128,14 +111,6 @@ class ChatController extends Controller
     public function update(Request $request, $userid, $chatId)
     {
         $chat = Chat::find($chatId);
-        if (empty($chat))
-        {
-            return response([
-                'success' => 'failed',
-                'description' => 'No such chat'
-            ],
-                '404');
-        }
         $chat->name = $request->name;
         $id_chat_type = ChatType::where('name', '=', $request->chat_type)->get()[0]['id'];
         $chat->id_chat_type = $id_chat_type;
@@ -154,19 +129,12 @@ class ChatController extends Controller
     public function destroy($userId, int $chatId)
     {
         $chat = Chat::find($chatId);
-        if (empty($chat))
-        {
-            return response([
-                'success' => 'failed',
-                'description' => 'No such chat'
-            ],
-                '404');
-        }
         $chat->is_deleted = true;
         $chat->save();
         $chat->delete();
 
-        $chat = Chat::find($chatId);
+//        $messagesToDelete = Message::where('id_chat', '=', $chatId)
+//            ->get();
 
         return response([
             'success' => 'success',
@@ -175,15 +143,18 @@ class ChatController extends Controller
     }
 
     /**
-     * Проверка, является ли пользователь администратором системы
-     *
+     * Проверка на наличие новых сообщений в чате пользователя
      * @param $userId
-     * @return bool
+     * @param $chatId
+     * @return \Illuminate\Http\Response
      */
-    private function isAdmin($userId)
+    public function haveNewMessages($userId, $chatId)
     {
-        $userRole = Role::find(User::find($userId)->id_role)->name;
-        return $userRole == 'admin';
+        $flag = UserChat::where('id_user', '=', $userId)
+            ->where('id_chat', '=', $chatId)
+            ->get()[0]['is_new_message'];
+
+        return response($flag, '200');
     }
 
 }

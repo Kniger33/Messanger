@@ -2,6 +2,9 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\EnsureChatExists;
+use App\Http\Middleware\EnsureMessageExists;
+use App\Http\Middleware\EnsureUserExists;
 use App\Http\Middleware\EnsureUserIsAdmin;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
@@ -64,5 +67,8 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'isAdmin' => EnsureUserIsAdmin::class,
+        'userExists' => EnsureUserExists::class,
+        'chatExists' => EnsureChatExists::class,
+        'messageExists' => EnsureMessageExists::class,
     ];
 }

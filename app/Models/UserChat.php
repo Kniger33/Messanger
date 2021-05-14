@@ -14,6 +14,13 @@ class UserChat extends Model
      * */
     protected $table = 'user_chat';
 
+    /**
+     * Формат хранения столбцов даты модели.
+     *
+     * @var string
+     */
+    protected $dateFormat = 'Y-d-m H:m:s';
+
     /*
      * Получить пользователя
      * */

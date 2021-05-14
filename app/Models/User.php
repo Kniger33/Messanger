@@ -15,13 +15,20 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    /*
+    /**
      * Название таблицы в БД
      * @var string
      * */
     protected $table = 'user';
 
-    /*
+    /**
+     * Формат хранения столбцов даты модели.
+     *
+     * @var string
+     */
+    protected $dateFormat = 'Y-d-m H:m:s';
+
+    /**
      * Получить роль пользователя
      * */
     public function role()
@@ -29,7 +36,7 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class, "id_role");
     }
 
-    /*
+    /**
      * Получить все чаты пользователя
      * */
     public function chats()

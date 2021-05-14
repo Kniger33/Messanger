@@ -2,31 +2,29 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\Role;
-use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
 
-class EnsureUserIsAdmin
+class EnsureMessageExists
 {
     /**
      * Handle an incoming request.
      *
-     * @param Request $request
-     * @param Closure $next
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure  $next
      * @return mixed
      */
     public function handle(Request $request, Closure $next)
     {
-        $userId = $request->route('userId');
-        $userRole = Role::find(User::find($userId)->id_role)->name;
-        if ($userRole != 'admin')
+        $messageId = $request->route('messageId');
+        $message = \App\Models\Message::find($messageId);
+        if (empty($message))
         {
             return response([
                 'success' => 'failed',
-                'description' => 'Allowed only for admin'
+                'description' => 'No such message',
             ],
-                '403');
+                '404');
         }
         return $next($request);
     }

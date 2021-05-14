@@ -2,31 +2,32 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\Role;
-use App\Models\User;
 use Closure;
+use http\Client\Curl\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 
-class EnsureUserIsAdmin
+
+class EnsureUserExists
 {
     /**
      * Handle an incoming request.
      *
-     * @param Request $request
-     * @param Closure $next
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure  $next
      * @return mixed
      */
     public function handle(Request $request, Closure $next)
     {
         $userId = $request->route('userId');
-        $userRole = Role::find(User::find($userId)->id_role)->name;
-        if ($userRole != 'admin')
+        $user = \App\Models\User::find($userId);
+        if (empty($user))
         {
             return response([
                 'success' => 'failed',
-                'description' => 'Allowed only for admin'
+                'description' => 'No such user',
             ],
-                '403');
+                '404');
         }
         return $next($request);
     }

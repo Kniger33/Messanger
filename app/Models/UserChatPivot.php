@@ -12,6 +12,13 @@ class UserChatPivot extends Pivot
      * */
     protected $table = 'user_chat';
 
+    /**
+     * Формат хранения столбцов даты модели.
+     *
+     * @var string
+     */
+    protected $dateFormat = 'Y-d-m H:m:s';
+
     /*
      * Получить все сообщения пользователя в чате
      * */

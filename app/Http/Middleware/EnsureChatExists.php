@@ -2,31 +2,29 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\Role;
-use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
 
-class EnsureUserIsAdmin
+class EnsureChatExists
 {
     /**
      * Handle an incoming request.
      *
-     * @param Request $request
-     * @param Closure $next
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure  $next
      * @return mixed
      */
     public function handle(Request $request, Closure $next)
     {
-        $userId = $request->route('userId');
-        $userRole = Role::find(User::find($userId)->id_role)->name;
-        if ($userRole != 'admin')
+        $chatId = $request->route('chatId');
+        $chat = \App\Models\Chat::find($chatId);
+        if (empty($chat))
         {
             return response([
                 'success' => 'failed',
-                'description' => 'Allowed only for admin'
+                'description' => 'No such chat',
             ],
-                '403');
+                '404');
         }
         return $next($request);
     }
