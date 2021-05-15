@@ -31,9 +31,9 @@ class Message extends Model
     }
 
     /*
-     * Получить документы, прикрепленные к сообщению
+     * Получить вложения, прикрепленные к сообщению
      * */
-    public function documents()
+    public function attachmentsInfo()
     {
         return $this->hasMany(Document::class, "id_message");
     }

@@ -21,8 +21,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(\App\Http\Middleware\EnsureUserExists::class)->group(function (){
 
     // Чат
-    Route::get('/v1/{userId}/chats', [\App\Http\Controllers\ChatController::class, 'index'])
-        ->middleware(\App\Http\Middleware\EnsureUserExists::class);
+    Route::get('/v1/{userId}/chats', [\App\Http\Controllers\ChatController::class, 'index']);
     Route::post('/v1/{userId}/chats', [\App\Http\Controllers\ChatController::class, 'store'])
         ->middleware('isAdmin');
 
@@ -44,6 +43,16 @@ Route::middleware(\App\Http\Middleware\EnsureUserExists::class)->group(function 
             ->middleware('messageExists');
         Route::delete('/v1/{userId}/chats/{chatId}/messages/{messageId}', [\App\Http\Controllers\MessageController::class, 'destroy'])
             ->middleware('messageExists');
+
+        // Пользователь
+        Route::get('v1/{userId}/chats/{chatId}/users', [\App\Http\Controllers\UserController::class, 'index']);
+        Route::post('v1/{userId}/chats/{chatId}/users', [\App\Http\Controllers\UserController::class, 'store'])
+            ->middleware('isAdmin');
+        Route::get('v1/{userId}/chats/{chatId}/users/{userInChatId}', [\App\Http\Controllers\UserController::class, 'show']);
+        Route::put('v1/{userId}/chats/{chatId}/users/{userInChatId}', [\App\Http\Controllers\UserController::class, 'update'])
+            ->middleware('isAdmin');
+        Route::delete('v1/{userId}/chats/{chatId}/users/{userInChatId}', [\App\Http\Controllers\UserController::class, 'destroy'])
+            ->middleware('isAdmin');
     });
 
 });

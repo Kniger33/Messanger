@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\MessageCollection;
-use App\Models\Document;
 use App\Models\Message;
 use App\Models\UserChat;
 use Illuminate\Http\Request;
@@ -73,13 +72,9 @@ class MessageController extends Controller
     public function show(string $userId, string $chatId, string $messageId)
     {
         $message = Message::find($messageId);
-        $docs = [
-            'attachments_info' => Document::where('id_message', '=', $messageId)
-                ->get(),
-        ];
+        $message->attachmentsInfo->toArray();
 
-        $data = array_merge($message->toArray(), $docs);
-        return response($data, '200');
+        return response($message, '200');
     }
 
     /**
@@ -115,6 +110,9 @@ class MessageController extends Controller
         $message->is_deleted = true;
         $message->save();
         $message->delete();
+
+        // добавить софт делит в документы
+//        $message->attachmentsInfo->delete();
 
         return response([
             'success' => 'success',
