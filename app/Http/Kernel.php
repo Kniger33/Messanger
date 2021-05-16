@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use App\Http\Middleware\EnsureChatExists;
+use App\Http\Middleware\EnsureDocumentExists;
 use App\Http\Middleware\EnsureMessageExists;
 use App\Http\Middleware\EnsureUserExists;
 use App\Http\Middleware\EnsureUserIsAdmin;
@@ -70,5 +71,6 @@ class Kernel extends HttpKernel
         'userExists' => EnsureUserExists::class,
         'chatExists' => EnsureChatExists::class,
         'messageExists' => EnsureMessageExists::class,
+        'documentExists' => EnsureDocumentExists::class,
     ];
 }

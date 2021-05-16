@@ -20,7 +20,7 @@ class Message extends Model
      *
      * @var string
      */
-    protected $dateFormat = 'Y-d-m H:m:s';
+    protected $dateFormat = 'Y-m-d H:m:s';
 
     /*
      *
@@ -30,7 +30,7 @@ class Message extends Model
         return $this->belongsToMany(UserChatPivot::class, 'user_chat', 'id_user', 'id_user');
     }
 
-    /*
+    /**
      * Получить вложения, прикрепленные к сообщению
      * */
     public function attachmentsInfo()
