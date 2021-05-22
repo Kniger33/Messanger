@@ -2,20 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\MessageCollection;
+use Illuminate\Http\Request;
+
 use App\Models\Message;
 use App\Models\UserChat;
-use Illuminate\Http\Request;
+
+use App\Http\Resources\MessageCollection;
 
 class MessageController extends Controller
 {
     /**
      * Display a listing of the resource.
-     * @param string $userId
-     * @param string $chatId
+     * @param int $userId
+     * @param int $chatId
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request, string $userId, string $chatId)
+    public function index(Request $request, int $userId, int $chatId)
     {
         $lastMessagesCount = $request->input('last');
 
@@ -38,11 +40,11 @@ class MessageController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param string $userId
-     * @param string $chatId
+     * @param int $userId
+     * @param int $chatId
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, string $userId, string $chatId)
+    public function store(Request $request, int $userId, int $chatId)
     {
         $newMessage = new Message();
         $newMessage->text = $request->data;
@@ -64,12 +66,12 @@ class MessageController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param string $userId
-     * @param string $chatId
-     * @param string $messageId
+     * @param int $userId
+     * @param int $chatId
+     * @param int $messageId
      * @return \Illuminate\Http\Response
      */
-    public function show(string $userId, string $chatId, string $messageId)
+    public function show(int $userId, int $chatId, int $messageId)
     {
         $message = Message::find($messageId);
         $message->attachmentsInfo->toArray();
@@ -81,12 +83,12 @@ class MessageController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param string $userId
-     * @param string $chatId
-     * @param string $messageId
+     * @param int $userId
+     * @param int $chatId
+     * @param int $messageId
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, string $userId, string $chatId, string $messageId)
+    public function update(Request $request, int $userId, int $chatId, int $messageId)
     {
         $message = Message::find($messageId);
         $message->text = $request->data;
@@ -99,12 +101,12 @@ class MessageController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param string $userId
-     * @param string $chatId
-     * @param string $messageId
+     * @param int $userId
+     * @param int $chatId
+     * @param int $messageId
      * @return \Illuminate\Http\Response
      */
-    public function destroy(string $userId, string $chatId, string $messageId)
+    public function destroy(int $userId, int $chatId, int $messageId)
     {
         $message = Message::find($messageId);
         $message->is_deleted = true;

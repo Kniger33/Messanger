@@ -2,27 +2,28 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\ChatCollection;
-use App\Models\Document;
-use App\Models\Message;
-use App\Models\User;
-use App\Models\UserChat;
 use Illuminate\Http\Request;
 
 use App\Models\Chat;
 use App\Models\ChatType;
+use App\Models\Document;
+use App\Models\Message;
+use App\Models\User;
+use App\Models\UserChat;
 
+use App\Http\Resources\ChatCollection;
 use App\Http\Resources\ChatResource;
+
 
 class ChatController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @param string $userId
+     * @param int $userId
      * @return \Illuminate\Http\Response
      */
-    public function index($userId)
+    public function index(int $userId)
     {
         $user = User::find($userId);
         $chats = $user->chats;
@@ -37,10 +38,10 @@ class ChatController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param string $userId
+     * @param int $userId
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, $userId)
+    public function store(Request $request, int $userId)
     {
         $chat_type = ChatType::where('name', '=', $request->chat_type)->get();
 
@@ -59,11 +60,11 @@ class ChatController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $userId
-     * @param  int  $chatId
+     * @param  int $userId
+     * @param  int $chatId
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, $userid, $chatId)
+    public function show(Request $request, int $userid, int $chatId)
     {
         $chat = new ChatResource(Chat::find($chatId));
 
@@ -104,11 +105,11 @@ class ChatController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $userId
-     * @param  int  $chatId
+     * @param  int $userId
+     * @param  int $chatId
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $userid, $chatId)
+    public function update(Request $request, int $userId, int $chatId)
     {
         $chat = Chat::find($chatId);
         $chat->name = $request->name;
@@ -122,11 +123,11 @@ class ChatController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $userId
-     * @param  int  $chatId
+     * @param int $userId
+     * @param int $chatId
      * @return \Illuminate\Http\Response
      */
-    public function destroy($userId, int $chatId)
+    public function destroy(int $userId, int $chatId)
     {
         $chat = Chat::find($chatId);
         $chat->is_deleted = true;
@@ -144,11 +145,11 @@ class ChatController extends Controller
 
     /**
      * Проверка на наличие новых сообщений в чате пользователя
-     * @param $userId
-     * @param $chatId
+     * @param int $userId
+     * @param int $chatId
      * @return \Illuminate\Http\Response
      */
-    public function haveNewMessages($userId, $chatId)
+    public function haveNewMessages(int $userId, int $chatId)
     {
         $flag = UserChat::where('id_user', '=', $userId)
             ->where('id_chat', '=', $chatId)

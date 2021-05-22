@@ -3,8 +3,13 @@
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\OtherFunctionalityController;
 use App\Http\Controllers\UserController;
-use Illuminate\Http\Request;
+
+use App\Http\Middleware\EnsureChatExists;
+use App\Http\Middleware\EnsureDocumentExists;
+use App\Http\Middleware\EnsureUserExists;
+
 use Illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------
@@ -17,18 +22,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-//Route::middleware('auth:api')->get('/user', function (Request $request) {
-//    return $request->user();
-//});
+Route::middleware(EnsureUserExists::class)->group(function (){
 
-Route::middleware(\App\Http\Middleware\EnsureUserExists::class)->group(function (){
+    // Запрос на создание чата
+    Route::post('/v1/{userId}/requestToCreateChat', [OtherFunctionalityController::class, 'requestToAdmin']);
 
     // Чат
     Route::get('/v1/{userId}/chats', [ChatController::class, 'index']);
     Route::post('/v1/{userId}/chats', [ChatController::class, 'store'])
         ->middleware('isAdmin');
 
-    Route::middleware(\App\Http\Middleware\EnsureChatExists::class)->group(function (){
+    Route::middleware(EnsureChatExists::class)->group(function (){
         // Чат
         Route::get('/v1/{userId}/chats/{chatId}', [ChatController::class, 'show']);
         Route::put('/v1/{userId}/chats/{chatId}', [ChatController::class, 'update'])
@@ -60,7 +64,7 @@ Route::middleware(\App\Http\Middleware\EnsureUserExists::class)->group(function 
         // Документы
         Route::get('v1/{userId}/chats/{chatId}/documents', [DocumentController::class, 'index']);
         Route::post('v1/{userId}/chats/{chatId}/documents', [DocumentController::class, 'store']);
-        Route::middleware(\App\Http\Middleware\EnsureDocumentExists::class)->group(function (){
+        Route::middleware(EnsureDocumentExists::class)->group(function (){
             Route::get('v1/{userId}/chats/{chatId}/documents/{documentId}', [DocumentController::class, 'show']);
             Route::put('v1/{userId}/chats/{chatId}/documents/{documentId}', [DocumentController::class, 'update']);
             Route::delete('v1/{userId}/chats/{chatId}/documents/{documentId}', [DocumentController::class, 'destroy']);

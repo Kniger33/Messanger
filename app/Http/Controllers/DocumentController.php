@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
+
 use App\Models\Document;
 use App\Models\Message;
-use Illuminate\Http\Request;
 
 class DocumentController extends Controller
 {
