@@ -107,7 +107,7 @@ class DocumentController extends Controller
      * Get document by id
      *
      */
-    public function getData()
+    public function getData(Request $request, int $userId, int $chatId, int $documentId)
     {
 
     }
@@ -116,7 +116,7 @@ class DocumentController extends Controller
      * Add document
      *
      */
-    public function setData()
+    public function setData(Request $request, int $userId, int $chatId, int $documentId)
     {
 
     }
@@ -125,7 +125,7 @@ class DocumentController extends Controller
      * Get user`s docs in chat
      *
      */
-    public function userDocuments()
+    public function userDocuments(nt $userId, int $chatId, int $documentId)
     {
 
     }
