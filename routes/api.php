@@ -64,13 +64,13 @@ Route::middleware(EnsureUserExists::class)->group(function (){
         // Документы
         Route::get('v1/{userId}/chats/{chatId}/documents', [DocumentController::class, 'index']);
         Route::post('v1/{userId}/chats/{chatId}/documents', [DocumentController::class, 'store']);
+        Route::get('v1/{userId}/chats/{chatId}/userDocuments', [DocumentController::class, 'userDocuments']);
         Route::middleware(EnsureDocumentExists::class)->group(function (){
             Route::get('v1/{userId}/chats/{chatId}/documents/{documentId}', [DocumentController::class, 'show']);
             Route::put('v1/{userId}/chats/{chatId}/documents/{documentId}', [DocumentController::class, 'update']);
             Route::delete('v1/{userId}/chats/{chatId}/documents/{documentId}', [DocumentController::class, 'destroy']);
             Route::get('v1/{userId}/chats/{chatId}/documents/{documentId}/data', [DocumentController::class, 'getData']);
             Route::post('v1/{userId}/chats/{chatId}/documents/{documentId}/data', [DocumentController::class, 'setData']);
-            Route::get('v1/{userId}/chats/{chatId}/userDocuments', [DocumentController::class, 'userDocuments']);
         });
     });
 

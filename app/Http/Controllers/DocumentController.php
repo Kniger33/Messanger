@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 
 use App\Models\Document;
 use App\Models\Message;
+use Illuminate\Support\Facades\Storage;
+use PhpParser\Comment\Doc;
 
 class DocumentController extends Controller
 {
@@ -105,29 +108,75 @@ class DocumentController extends Controller
 
     /**
      * Get document by id
-     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param int $userId
+     * @param int $chatId
+     * @param int $documentId
+     * @return \Illuminate\Http\Response
      */
     public function getData(Request $request, int $userId, int $chatId, int $documentId)
     {
-
+        $doc = Document::find($documentId);
+        return Storage::download($doc->link, $doc->name);
+//        return Storage::download($doc->link, $doc->name.$doc->extendion);
     }
 
     /**
      * Add document
-     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param int $userId
+     * @param int $chatId
+     * @param int $documentId
+     * @return \Illuminate\Http\Response
      */
     public function setData(Request $request, int $userId, int $chatId, int $documentId)
     {
+        $link = '';
 
+        $doc = Document::find($documentId);
+
+        if ($request->hasFile('file'))
+        {
+            $file = $request->file('file');
+            $name = $file->getClientOriginalName();
+            $link = $file->storeAs($chatId.'/'.$userId, $name);
+
+            $doc->link = $link;
+            $doc->name = $name;
+            $doc->extension = $file->extension();
+            $doc->save();
+
+            return response($doc, '200');
+        }
+        else
+        {
+            return response([
+                'success' => 'failed',
+                'description' => 'There is no file'
+            ], '404');
+        }
     }
 
     /**
      * Get user`s docs in chat
-     *
+     * @param int $userId
+     * @param int $chatId
+     * @return \Illuminate\Http\Response
      */
-    public function userDocuments(nt $userId, int $chatId, int $documentId)
+    public function userDocuments(int $userId, int $chatId)
     {
+        $messages = Message::where('id_user', '=', $userId)
+            ->where('id_chat', '=', $chatId)
+            ->get();
+        ;
 
+        $docs = [];
+        foreach ($messages as $message)
+        {
+            array_push($docs, $message->attachmentsInfo);
+        }
+
+        return response($docs, '200');
     }
 
 }
